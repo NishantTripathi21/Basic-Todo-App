@@ -1,13 +1,16 @@
 const mongoose = require("mongoose");
-mongoose.connect("mongodb://localhost:27017/todoAppDB");
+require('dotenv').config();
+
+mongoose.connect("mongodb://localhost:27017/todo-app");
+
 const todoSchema = mongoose.Schema({
     title: String,
     description: String,
-    completed: Boolean
-})
+    completed: Boolean,
+});
 
-const todoDB = mongoose.model("todos",todoSchema);
+const Todo = mongoose.model('todos', todoSchema);
 
-module.exports={
-    todoDB
-}
+module.exports = {
+    Todo
+};

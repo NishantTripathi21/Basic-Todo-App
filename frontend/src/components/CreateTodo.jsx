@@ -1,43 +1,36 @@
 import { useState } from "react";
 
 export function CreateTodo() {
-    const [title, setTitle]= useState("");
-    const [description, setDescription]= useState("");
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
 
-    return <div>
-        <input style={{
-            padding: 10, margin: 10
-        }}
-        type="text" placeholder="title" onChange={(e)=>{
-            const value = e.target.value; // e.target gives DOM element
-            setTitle(value);
-        }}/> <br />
+  const addTodo = () => {
+    fetch("http://localhost:3000/todo", {
+      method: "POST",
+      body: JSON.stringify({ title, description }),
+      headers: {
+        "Content-type": "application/json"
+      }
+    })
+      .then(async (res) => {
+        await res.json();
+        alert("Todo Added!");
+        // Clear input fields after adding
+        setTitle("");
+        setDescription("");
+        // Reload page to see new todo
+        window.location.reload();
+      })
+      .catch(error => console.error("Error adding todo:", error));
+  };
 
-        <input style={{
-            padding: 10, margin: 10
-        }} type="text" placeholder="description" onChange={(e)=>{
-            const value = e.target.value; // e.target gives DOM element
-            setDescription(value);
-        }}/> <br />
-
-        <button onClick={()=>{
-            fetch("http://localhost:3000/todos/",{
-                method: "POST",
-                body: JSON.stringify({
-                    title: title,
-                    description: description
-                }),
-                headers: {
-                    "content-type": "application/json"
-                }
-            })
-            .then(async (res)=>{
-                const json = await res.json();
-                const id = json.id;
-                
-                alert("todo added");
-            })
-        }}>Add a todo</button>
+  return (
+    <div>
+      <input type="text" placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} />
+      <br />
+      <input type="text" placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} />
+      <br />
+      <button onClick={addTodo}>Add a todo</button>
     </div>
+  );
 }
-

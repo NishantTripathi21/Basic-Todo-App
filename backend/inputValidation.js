@@ -1,26 +1,16 @@
 const zod = require("zod");
 
-// // for post request
-// {
-//     title: string,
-//     description: string
-// }
-
-// // for put route
-// {
-//     id: zod.string
-// }
-
-const postSchema = zod.object({
+const createTodo = zod.object({
     title: zod.string(),
     description: zod.string()
-})
+});
 
-const putSchema = zod.object({
+//the ID is a string
+const updateTodo = zod.object({
     id: zod.string()
-})
+});
 
-module.exports= {
-    postSchema: postSchema,
-    putSchema: putSchema
-}
+module.exports = {
+    createTodo,
+    updateTodo
+};

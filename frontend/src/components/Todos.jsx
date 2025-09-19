@@ -1,24 +1,32 @@
-import { useState } from "react";
-export function Todos({todos}) {
-    const markAsDone = (id)=>{
-        fetch("http://localhost:3000/completed/",{
-            method: "PUT",
-            body: JSON.stringify({ id: id }),
-            headers : {
-                "content-type": "application/json"
-            }
-    }).then(respone => response.json())
-    .then(data => {console.log("marked as completed")})
-    }
-    return <div>
-        {   
-            todos.map((todo)=>{
-                return <div key={todo._id}>
-                    <h1>{todo.title} </h1> 
-                    <h2>{todo.description}</h2>
-                    <button onClick={()=>markAsDone(todo._id)}>{todo.completed ? "completed" : "Mark as complete"}</button>
-                </div>
-            })
-        }
+// frontend/src/components/Todos.jsx
+export function Todos({ todos }) {
+  const markAsCompleted = (id) => {
+    fetch("http://localhost:3000/completed", {
+      method: "PUT",
+      body: JSON.stringify({ id }),
+      headers: {
+        "Content-type": "application/json"
+      }
+    })
+      .then(async (res) => {
+        await res.json();
+        alert("Todo marked as completed!");
+        window.location.reload();
+      })
+      .catch(error => console.error("Error marking todo as completed:", error));
+  };
+
+  return (
+    <div>
+      {todos.map((todo) => (
+        <div key={todo._id}>
+          <h3>{todo.title}</h3>
+          <p>{todo.description}</p>
+          <button onClick={() => markAsCompleted(todo._id)}>
+            {todo.completed ? "Completed" : "Mark as Completed"}
+          </button>
+        </div>
+      ))}
     </div>
+  );
 }
